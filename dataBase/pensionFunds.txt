@@ -1,0 +1,10 @@
+Deutsche Rentenversicherung Bund 1957 true
+Bayerische Versorgungskammer 1923 false
+Versorgungsanstalt des Bundes und der Länder (VBL) 1966 true
+Rundfunkversorgungswerk (RfW) 1957 false
+Süddeutsche Versorgungskasse 1921 false
+Versorgungsanstalt der deutschen Bühnen (VddB) 1899 false
+Rheinische Versorgungskassen 1925 false
+Versorgungsanstalt der deutschen Wirtschaft (VdW) 1951 false
+Versorgungswerk der Presse (VdP) 1928 false
+Pensionskasse der Mitarbeiter der Hoechst-Gruppe VVaG 1922 false
