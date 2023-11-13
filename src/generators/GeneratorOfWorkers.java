@@ -1,8 +1,5 @@
 package generators;
-
-import people.Gender;
 import people.Worker;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,32 +8,38 @@ import java.util.*;
 
 public class GeneratorOfWorkers {
 
+    private static int minAgeOfWorker = 20;
+    private static int maxAgeOfWorker = 65;
+    private static final File persons = new File("./dataBase/persons.txt");
+
     private GeneratorOfWorkers() {
     }
 
-    public static List<Worker> generateWorkers() throws FileNotFoundException {
-        Random random = new Random();
-        final int MIN_AGE_OF_WORKER = 20;
-        final int MAX_AGE_OF_WORKER = 65;
+    public static int getMinAgeOfWorker() {
+        return minAgeOfWorker;
+    }
 
-        File persons = new File("..//pensionFund/dataBase/persons.txt");
+    public static void setMinAgeOfWorker(int minAgeOfWorker) {
+        GeneratorOfWorkers.minAgeOfWorker = minAgeOfWorker;
+    }
+
+    public static int getMaxAgeOfWorker() {
+        return maxAgeOfWorker;
+    }
+
+    public static void setMaxAgeOfWorker(int maxAgeOfWorker) {
+        GeneratorOfWorkers.maxAgeOfWorker = maxAgeOfWorker;
+    }
+
+    public static List<Worker> generateWorkers() throws FileNotFoundException {
         FileReader fileReader = new FileReader(persons);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         List<Worker> workers = bufferedReader.lines()
                 .filter(Objects::nonNull)
-                .map(worker -> {
-                    String[] temp = worker.split(" ");
-                    String name = temp[0] + " " + temp[1];
-                    int age = random.nextInt(MIN_AGE_OF_WORKER,MAX_AGE_OF_WORKER);
-                    double minSalary = Integer.parseInt(temp[2]);
-                    double maxSalary = Integer.parseInt(temp[3]);
-                    Gender gender = (temp[4].equals("MALE")) ? Gender.MALE : Gender.FEMALE;
-                    return new Worker(name, age, minSalary, maxSalary, gender);
-                })
+                .map(Worker::new)
                 .toList();
         return workers;
-
     }
 
 }

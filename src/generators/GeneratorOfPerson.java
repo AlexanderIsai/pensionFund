@@ -1,18 +1,24 @@
 package generators;
+
 import people.*;
+
 import java.io.*;
 import java.util.List;
 import java.util.Random;
 
 public class GeneratorOfPerson {
 
-    public static void main(String[] args) throws IOException {
+    private static int minBorderOfMinSalary = 300;
+    private static int maxBorderOfMinSalary = 1001;
+    private static int minBorderOfMaxSalary = 600;
+    private static int maxBorderOfMaxSalary = 6001;
+    private static File names = new File("./dataBase/names.txt");
+    private static File persons = new File("./dataBase/persons.txt");
 
-        final int QUANTITY_OF_PERSONS = 1000;
+
+    public static void generatePersons(String[] args) throws IOException {
 
         Random random = new Random();
-        File names = new File("../pensionFund/dataBase/names.txt");
-        File persons = new File("../pensionFund/dataBase/persons.txt");
 
         FileReader fileReader = new FileReader(names);
         FileWriter fileWriter = new FileWriter(persons);
@@ -23,8 +29,8 @@ public class GeneratorOfPerson {
         List<String> people = bufferedReader.lines().toList();
 
         for (String person : people) {
-            int minSalary = random.nextInt(300, 1001);
-            int maxSalary = random.nextInt(600, 6001);
+            int minSalary = random.nextInt(minBorderOfMinSalary, maxBorderOfMinSalary);
+            int maxSalary = random.nextInt(minBorderOfMaxSalary, maxBorderOfMaxSalary);
             String[] temp = person.split(" ");
             Gender gender = (temp[0].endsWith("а") || temp[0].endsWith("я")) ? Gender.FEMALE : Gender.MALE;
             String generatedString = person + " " + minSalary + " " + maxSalary + " " + gender;

@@ -6,6 +6,7 @@ import calculator.CalculatorUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
 
@@ -15,9 +16,11 @@ public class Worker extends Person implements AbleToCalculatePension {
     private final static int QUANTITY_OF_PROFESSION = 3;
     private final static double COEFFICIENT_EXTRA_PROFESSION = 0.05;
 
-
+    private static int minAge = 20;
+    private static int maxAge = 65;
     private double minSalary;
     private double maxSalary;
+
     private Set<Professions> professions;
 
     public Worker(String name, int age, int growth, double weight, int money, double minSalary, double maxSalary) {
@@ -26,7 +29,14 @@ public class Worker extends Person implements AbleToCalculatePension {
         this.maxSalary = maxSalary;
     }
 
-    public Worker() {
+    public Worker(String string) {
+        Random random = new Random();
+        String[] temp = string.split(" ");
+        this.setName(temp[0] + " " + temp[1]);
+        this.setAge(random.nextInt(minAge, maxAge));
+        this.minSalary = Integer.parseInt(temp[2]);
+        this.maxSalary = Integer.parseInt(temp[3]);
+        this.setGender((temp[4].equals("MALE")) ? Gender.MALE : Gender.FEMALE);
     }
 
     public Worker(String name, int age, double minSalary, double maxSalary, Gender gender) {

@@ -1,37 +1,44 @@
 package fund;
+import generators.GeneratorOfWorkers;
 import people.Worker;
 import calculator.AbleToCalculatePension;
 
+import java.io.FileNotFoundException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class PensionFund {
 
+    private static int minQuantity = 100;
+    private static int maxQuantity = 5000;
     private String name;
     private boolean isState;
     private String dateCreation;
-    //    private int quantityMembers;
     private List<Worker> members;
 
-    private Map<DayOfWeek, Boolean> daysOfWeek;
+    private static Map<DayOfWeek, Boolean> daysOfWeek = fillWorkDays();
 
     public PensionFund(String name, boolean isState, String dateCreation) {
         this.name = name;
         this.isState = isState;
         this.dateCreation = dateCreation;
-        this.daysOfWeek = new HashMap<>();
     }
 
-    public PensionFund(String name, boolean isState, String dateCreation, List<Worker> members, Map<DayOfWeek, Boolean> daysOfWeek) {
+    public PensionFund(){}
+
+    public PensionFund(String name, boolean isState, String dateCreation, List<Worker> members) {
         this.name = name;
         this.isState = isState;
         this.dateCreation = dateCreation;
         this.members = members;
-        this.daysOfWeek = daysOfWeek;
+    }
+    public PensionFund (String string) throws FileNotFoundException {
+        String[] temp = string.split(" ");
+        this.isState = temp[temp.length - 1].equals("true");
+        this.dateCreation = temp[temp.length - 2];
+        this.name = String.join(" ", Arrays.copyOfRange(temp, 0, temp.length - 2));
+        this.members = fillPensionFundByMembers(minQuantity, maxQuantity);
     }
 
     public String getName() {
@@ -63,11 +70,51 @@ public class PensionFund {
     }
 
     public void setDaysOfWeek(Map<DayOfWeek, Boolean> daysOfWeek) {
-        this.daysOfWeek = daysOfWeek;
+        PensionFund.daysOfWeek = daysOfWeek;
     }
 
     public String getDateCreation() {
         return dateCreation;
+    }
+
+    public static int getMinQuantity() {
+        return minQuantity;
+    }
+
+    public static void setMinQuantity(int minQuantity) {
+        PensionFund.minQuantity = minQuantity;
+    }
+
+    public static int getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public static void setMaxQuantity(int maxQuantity) {
+        PensionFund.maxQuantity = maxQuantity;
+    }
+
+    public List<Worker> fillPensionFundByMembers(int minQuantity, int maxQuantity) throws FileNotFoundException {
+        Random random = new Random();
+        List<Worker> workers = GeneratorOfWorkers.generateWorkers();
+        List<Worker> members = new ArrayList<>();
+        int quantityOfMembers = (isState) ? random.nextInt(minQuantity * 10, maxQuantity * 2) : random.nextInt(minQuantity, maxQuantity / 2);
+        for (int i = 0; i < quantityOfMembers; i++) {
+            Worker worker = workers.get(random.nextInt(workers.size()));
+            if(!members.contains(worker)){
+                members.add(worker);
+            }
+        }
+           return members;
+    }
+
+    public static HashMap<DayOfWeek, Boolean> fillWorkDays(){
+        HashMap<DayOfWeek, Boolean> workingDays = new HashMap<>();
+        Random random = new Random();
+        DayOfWeek[] daysOfWeek = DayOfWeek.values();
+        for (DayOfWeek dayOfWeek : daysOfWeek) {
+            workingDays.put(dayOfWeek, random.nextDouble() > 0.1);
+        }
+        return workingDays;
     }
 
     public boolean getInfo() {
@@ -124,7 +171,7 @@ public class PensionFund {
         if (!Objects.equals(name, fund.name)) return false;
         if (!Objects.equals(dateCreation, fund.dateCreation)) return false;
         if (!Objects.equals(members, fund.members)) return false;
-        return Objects.equals(daysOfWeek, fund.daysOfWeek);
+        return Objects.equals(daysOfWeek, daysOfWeek);
     }
 
     @Override
@@ -143,7 +190,7 @@ public class PensionFund {
                 "name='" + name + '\'' +
                 ", isState=" + isState +
                 ", dateCreation='" + dateCreation + '\'' +
-                ", members=" + members +
+                ", members=" + members.size() +
                 ", daysOfWeek=" + daysOfWeek +
                 '}';
     }

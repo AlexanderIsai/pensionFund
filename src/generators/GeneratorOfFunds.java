@@ -1,17 +1,13 @@
 package generators;
-
 import java.io.*;
 import java.util.List;
-import java.util.Random;
 
 public class GeneratorOfFunds {
 
+    private static final File funds = new File("./dataBase/funds.txt");
+    private static final File pensionFunds = new File("./dataBase/pensionFunds.txt");
+
     public static void main(String[] args) throws IOException {
-
-        Random random = new Random();
-
-        File funds = new File("..//pensionFund/dataBase/funds.txt");
-        File pensionFunds = new File("..//pensionFund/dataBase/pensionFunds.txt");
 
         FileReader fileReader = new FileReader(funds);
         FileWriter fileWriter = new FileWriter(pensionFunds);
@@ -28,7 +24,5 @@ public class GeneratorOfFunds {
             bufferedWriter.newLine();
         }
             bufferedWriter.flush();
-
-
     }
 }
