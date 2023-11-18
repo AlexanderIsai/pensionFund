@@ -1,17 +1,21 @@
 package generators;
+
 import fund.PensionFund;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import utils.Utils;
+
+import java.io.*;
 import java.util.*;
 
 public class GeneratorOfPensionFunds {
-    private static final File funds = new File("./dataBase/pensionFunds.txt");
+    private static final File FUNDS = new File("./dataBase/pensionFunds.txt");
+
     private GeneratorOfPensionFunds() {
     }
-    public static List<PensionFund> generatePensionFunds() throws FileNotFoundException {
-        FileReader fileReader = new FileReader(funds);
+
+    public static List<PensionFund> generatePensionFunds() throws IOException {
+        Utils utils = new Utils();
+        List<String> texts = utils.getTexts();
+        FileReader fileReader = new FileReader(FUNDS);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         List<PensionFund> pensionFunds = bufferedReader.lines()
@@ -19,7 +23,8 @@ public class GeneratorOfPensionFunds {
                 .map(fund -> {
                     try {
                         return new PensionFund(fund);
-                    } catch (FileNotFoundException e) {
+                    } catch (IOException e) {
+                        System.out.println(texts.get(12));
                         throw new RuntimeException(e);
                     }
                 })

@@ -16,8 +16,8 @@ public class Worker extends Person implements AbleToCalculatePension {
     private final static int QUANTITY_OF_PROFESSION = 3;
     private final static double COEFFICIENT_EXTRA_PROFESSION = 0.05;
 
-    private static int minAge = 20;
-    private static int maxAge = 65;
+    private final static int MIN_AGE = 20;
+    private final static int MAX_AGE = 65;
     private double minSalary;
     private double maxSalary;
 
@@ -33,7 +33,7 @@ public class Worker extends Person implements AbleToCalculatePension {
         Random random = new Random();
         String[] temp = string.split(" ");
         this.setName(temp[0] + " " + temp[1]);
-        this.setAge(random.nextInt(minAge, maxAge));
+        this.setAge(random.nextInt(MIN_AGE, MAX_AGE));
         this.minSalary = Integer.parseInt(temp[2]);
         this.maxSalary = Integer.parseInt(temp[3]);
         this.setGender((temp[4].equals("MALE")) ? Gender.MALE : Gender.FEMALE);

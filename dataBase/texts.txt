@@ -1,0 +1,24 @@
+=== PENSION FUNDS ===
+Приветствую на нашей странице статистики. Хотите узнать больше? y/n
+Выберите тип расчета: | 1 - найти фонд, где больше всего членов | 2 - найти имя человека, у которого самая большая пенсия | 3 - найти людей, которые стали жертвами негосударственных фондов | 4 - найти среднюю пенсию по фондам | 5 - найти среднюю пенсию по людям | 6 - найти наибольшую пенсию среди людей определенного возраста | 7 - найти самого молодого человека из членов государственных фондов
+ workers pension =
+ state pension =
+==== MEDIAN PENSION OF EVEN FUND ====
+===== AVERAGE PENSION AMONG WORKERS =====
+Try again
+Будете продолжать? y/n
+Будьте внимательнее в Вашем выборе
+Auf Wiedersehen
+Информация успешно записана
+Файл не найден
+==== MOST POPULAR PENSION FUND ====
+==== WORKER WITH BIGGEST PENSION (all funds) ====
+==== WORKER WITH BIGGEST UNSTOLEN PENSION ====
+==== QUANTITY OF LOSERS ====
+==== MEDIAN PENSION OF EVEN FUND ====
+==== THE BIGGEST PENSION AMONG WORKERS YOUNGER AS ... ====
+Input limit of age
+==== THE WORKER WITH THE BIGGEST PENSION YOUNGER AS ... ====
+==== THE YOUNGEST WORKER FROM STATEFUNDS ====
+==== MEDIAN PENSION OF EVEN FUND ====
+Средняя пенсия для фонда

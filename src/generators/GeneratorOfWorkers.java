@@ -1,44 +1,43 @@
 package generators;
+
 import people.Worker;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import utils.Utils;
+
+import java.io.*;
 import java.util.*;
 
 public class GeneratorOfWorkers {
 
-    private static int minAgeOfWorker = 20;
-    private static int maxAgeOfWorker = 65;
-    private static final File persons = new File("./dataBase/persons.txt");
+    private final static int MIN_AGE_OF_WORKER = 20;
+    private final static int MAX_AGE_OF_WORKER = 65;
+    private static final File PERSONS = new File("./dataBase/persons.txt");
 
     private GeneratorOfWorkers() {
     }
 
     public static int getMinAgeOfWorker() {
-        return minAgeOfWorker;
-    }
-
-    public static void setMinAgeOfWorker(int minAgeOfWorker) {
-        GeneratorOfWorkers.minAgeOfWorker = minAgeOfWorker;
+        return MIN_AGE_OF_WORKER;
     }
 
     public static int getMaxAgeOfWorker() {
-        return maxAgeOfWorker;
+        return MAX_AGE_OF_WORKER;
     }
 
-    public static void setMaxAgeOfWorker(int maxAgeOfWorker) {
-        GeneratorOfWorkers.maxAgeOfWorker = maxAgeOfWorker;
-    }
+    public static List<Worker> generateWorkers() throws IOException {
+        Utils utils = new Utils();
 
-    public static List<Worker> generateWorkers() throws FileNotFoundException {
-        FileReader fileReader = new FileReader(persons);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-        List<Worker> workers = bufferedReader.lines()
-                .filter(Objects::nonNull)
-                .map(Worker::new)
-                .toList();
+        List<String> texts = utils.getTexts();
+        List<Worker> workers;
+        try (FileReader fileReader = new FileReader(PERSONS);
+             BufferedReader bufferedReader = new BufferedReader(fileReader);) {
+            workers = bufferedReader.lines()
+                    .filter(Objects::nonNull)
+                    .map(Worker::new)
+                    .toList();
+        } catch (IOException e) {
+            System.out.println(texts.get(12));
+            throw new RuntimeException(e);
+        }
         return workers;
     }
 

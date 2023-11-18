@@ -1,17 +1,19 @@
 package fund;
+
 import generators.GeneratorOfWorkers;
 import people.Worker;
 import calculator.AbleToCalculatePension;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 
 public class PensionFund {
 
-    private static int minQuantity = 100;
-    private static int maxQuantity = 5000;
+    private final static int MIN_QUANTITY = 100;
+    private final static int MAX_QUANTITY = 5000;
     private String name;
     private boolean isState;
     private String dateCreation;
@@ -25,7 +27,8 @@ public class PensionFund {
         this.dateCreation = dateCreation;
     }
 
-    public PensionFund(){}
+    public PensionFund() {
+    }
 
     public PensionFund(String name, boolean isState, String dateCreation, List<Worker> members) {
         this.name = name;
@@ -33,12 +36,13 @@ public class PensionFund {
         this.dateCreation = dateCreation;
         this.members = members;
     }
-    public PensionFund (String string) throws FileNotFoundException {
+
+    public PensionFund(String string) throws IOException {
         String[] temp = string.split(" ");
         this.isState = temp[temp.length - 1].equals("true");
         this.dateCreation = temp[temp.length - 2];
         this.name = String.join(" ", Arrays.copyOfRange(temp, 0, temp.length - 2));
-        this.members = fillPensionFundByMembers(minQuantity, maxQuantity);
+        this.members = fillPensionFundByMembers(MIN_QUANTITY, MAX_QUANTITY);
     }
 
     public String getName() {
@@ -78,36 +82,28 @@ public class PensionFund {
     }
 
     public static int getMinQuantity() {
-        return minQuantity;
-    }
-
-    public static void setMinQuantity(int minQuantity) {
-        PensionFund.minQuantity = minQuantity;
+        return MIN_QUANTITY;
     }
 
     public static int getMaxQuantity() {
-        return maxQuantity;
+        return MAX_QUANTITY;
     }
 
-    public static void setMaxQuantity(int maxQuantity) {
-        PensionFund.maxQuantity = maxQuantity;
-    }
-
-    public List<Worker> fillPensionFundByMembers(int minQuantity, int maxQuantity) throws FileNotFoundException {
+    public List<Worker> fillPensionFundByMembers(int minQuantity, int maxQuantity) throws IOException {
         Random random = new Random();
         List<Worker> workers = GeneratorOfWorkers.generateWorkers();
         List<Worker> members = new ArrayList<>();
         int quantityOfMembers = (isState) ? random.nextInt(minQuantity * 10, maxQuantity * 2) : random.nextInt(minQuantity, maxQuantity / 2);
         for (int i = 0; i < quantityOfMembers; i++) {
             Worker worker = workers.get(random.nextInt(workers.size()));
-            if(!members.contains(worker)){
+            if (!members.contains(worker)) {
                 members.add(worker);
             }
         }
-           return members;
+        return members;
     }
 
-    public static HashMap<DayOfWeek, Boolean> fillWorkDays(){
+    public static HashMap<DayOfWeek, Boolean> fillWorkDays() {
         HashMap<DayOfWeek, Boolean> workingDays = new HashMap<>();
         Random random = new Random();
         DayOfWeek[] daysOfWeek = DayOfWeek.values();
