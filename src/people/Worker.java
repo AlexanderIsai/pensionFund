@@ -38,6 +38,10 @@ public class Worker extends Person implements AbleToCalculatePension {
         this.maxSalary = Integer.parseInt(temp[3]);
         this.setGender((temp[4].equals("MALE")) ? Gender.MALE : Gender.FEMALE);
     }
+    public Worker(){
+
+    }
+
 
     public Worker(String name, int age, double minSalary, double maxSalary, Gender gender) {
         super(name, age, gender);

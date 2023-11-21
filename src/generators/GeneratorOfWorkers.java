@@ -1,5 +1,6 @@
 package generators;
 
+import fund.Phrase;
 import people.Worker;
 import utils.Utils;
 
@@ -26,7 +27,7 @@ public class GeneratorOfWorkers {
     public static List<Worker> generateWorkers() throws IOException {
         Utils utils = new Utils();
 
-        List<String> texts = utils.getTexts();
+        HashMap<Phrase, String> strings = utils.getString();
         List<Worker> workers;
         try (FileReader fileReader = new FileReader(PERSONS);
              BufferedReader bufferedReader = new BufferedReader(fileReader);) {
@@ -35,7 +36,7 @@ public class GeneratorOfWorkers {
                     .map(Worker::new)
                     .toList();
         } catch (IOException e) {
-            System.out.println(texts.get(12));
+            System.out.println(strings.get(Phrase.FILE_NOT_FOUND));
             throw new RuntimeException(e);
         }
         return workers;

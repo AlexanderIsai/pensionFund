@@ -1,6 +1,7 @@
 package generators;
 
 import fund.PensionFund;
+import fund.Phrase;
 import utils.Utils;
 
 import java.io.*;
@@ -14,7 +15,7 @@ public class GeneratorOfPensionFunds {
 
     public static List<PensionFund> generatePensionFunds() throws IOException {
         Utils utils = new Utils();
-        List<String> texts = utils.getTexts();
+        HashMap<Phrase, String> strings = utils.getString();
         FileReader fileReader = new FileReader(FUNDS);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -24,7 +25,7 @@ public class GeneratorOfPensionFunds {
                     try {
                         return new PensionFund(fund);
                     } catch (IOException e) {
-                        System.out.println(texts.get(12));
+                        System.out.println(strings.get(Phrase.SUCCESS_INFO));
                         throw new RuntimeException(e);
                     }
                 })

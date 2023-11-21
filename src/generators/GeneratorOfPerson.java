@@ -1,9 +1,11 @@
 package generators;
 
+import fund.Phrase;
 import people.*;
 import utils.Utils;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -19,7 +21,7 @@ public class GeneratorOfPerson {
     public static void generatePersons(String[] args) throws IOException {
         Utils utils = new Utils();
 
-        List<String> texts = utils.getTexts();
+        HashMap<Phrase, String> strings = utils.getString();
 
         Random random = new Random();
         try (FileReader fileReader = new FileReader(NAMES);
@@ -39,10 +41,10 @@ public class GeneratorOfPerson {
             }
             bufferedWriter.flush();
             if (PERSONS.exists() && PERSONS.length() > 0) {
-                System.out.println(texts.get(11));
+                System.out.println(strings.get(Phrase.SUCCESS_INFO));
             }
         } catch (IOException e) {
-            System.out.println(texts.get(12));
+            System.out.println(strings.get(Phrase.FILE_NOT_FOUND));
             e.printStackTrace();
         }
     }

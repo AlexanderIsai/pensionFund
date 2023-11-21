@@ -1,6 +1,7 @@
 package utils;
 
 import fund.PensionFund;
+import fund.Phrase;
 import fund.Request;
 import people.Worker;
 
@@ -9,13 +10,17 @@ import java.util.*;
 
 
 public class Utils {
-    List<String> texts = getTexts();
+
+    private final File FILE = new File("./dataBase/texts.txt");
+
+    private HashMap<Phrase, String> strings = getString();
+
 
     public Utils() throws IOException {
     }
 
     public PensionFund findMaxPopularPensionFund(List<PensionFund> pensionFunds) {
-        System.out.println(texts.get(13));
+        System.out.println(strings.get(Phrase.POPULAR_FUND));
         PensionFund mostPopularPensionFund = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
                 .max(Comparator.comparingInt(fund -> fund.getMembers().size()))
@@ -33,7 +38,7 @@ public class Utils {
 
 
     public Worker findWorkerWithBiggestPensionAll(List<PensionFund> pensionFunds) {
-        System.out.println(texts.get(14));
+        System.out.println(strings.get(Phrase.HIGHEST_PENSION));
         Worker worker = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
                 .map(PensionFund::getMembers)
@@ -44,7 +49,7 @@ public class Utils {
     }
 
     public Worker findWorkerWithBiggestPensionState(List<PensionFund> pensionFunds) {
-        System.out.println(texts.get(15));
+        System.out.println(strings.get(Phrase.HIGHEST_STATE_PENSION));
         AbstractMap.SimpleEntry<Worker, Double> winner = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
                 .flatMap(pensionFund -> pensionFund.getMembers().stream()
@@ -71,7 +76,7 @@ public class Utils {
     }
 
     public List<Worker> findLosers(List<PensionFund> pensionFunds) {
-        System.out.println(texts.get(16));
+        System.out.println(strings.get(Phrase.LOSERS));
         List<Worker> losers = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
                 .filter(pensionFund -> !pensionFund.isState())
@@ -91,7 +96,7 @@ public class Utils {
     }
 
     public double findMedianPension(PensionFund pensionFund) {
-        System.out.println(texts.get(17));
+        System.out.println(strings.get(Phrase.MEDIAN_PENSION_OF_FUNDS));
         double average = pensionFund.getMembers().stream()
                 .filter(Objects::nonNull)
                 .mapToDouble(pension -> pensionFund.calculateMedianPension(pensionFund.getMembers()))
@@ -101,9 +106,9 @@ public class Utils {
     }
 
     public double getBiggestPensionWithAge(List<PensionFund> pensionFunds) {
-        System.out.println(texts.get(18));
+        System.out.println(strings.get(Phrase.HIGHEST_PENSION_AGE));
         Scanner scanner = new Scanner(System.in);
-        System.out.println(texts.get(19));
+        System.out.println(strings.get(Phrase.INPUT_AGE));
         int age = scanner.nextInt();
         List<Double> pensions = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
@@ -116,9 +121,9 @@ public class Utils {
     }
 
     public Worker findWorkerWithBiggestPensionWithAge(List<PensionFund> pensionFunds) {
-        System.out.println(texts.get(20));
+        System.out.println(strings.get(Phrase.WORKER_HIGHEST_PENSION_AGE));
         Scanner scanner = new Scanner(System.in);
-        System.out.println(texts.get(19));
+        System.out.println(strings.get(Phrase.INPUT_AGE));
         int age = scanner.nextInt();
         Worker worker = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
@@ -131,7 +136,7 @@ public class Utils {
     }
 
     public Worker findYoungestMembersOfFunds(List<PensionFund> pensionFunds) {
-        System.out.println(texts.get(21));
+        System.out.println(strings.get(Phrase.YOUNGEST_WORKER_STATE_FUND));
         Worker worker = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null && pensionFund.isState())
                 .flatMap(pensionFund -> pensionFund.getMembers().stream())
@@ -149,13 +154,13 @@ public class Utils {
     }
 
     public void findMedianPensionForEach(List<PensionFund> pensionFunds) {
-        System.out.println(texts.get(22));
+        System.out.println(strings.get(Phrase.MEDIAN_PENSION_OF_FUNDS));
         pensionFunds.forEach(pensionFund -> {
             double averagePension = pensionFund.getMembers().stream()
                     .mapToDouble(member -> pensionFund.calculateMedianPension(List.of(member)))
                     .average()
                     .orElse(0.0);
-            System.out.println(texts.get(23) + pensionFund.getName() + ": " + averagePension);
+            System.out.println(strings.get(Phrase.AVERAGE_PENSION_FUNDS) + pensionFund.getName() + ": " + averagePension);
         });
     }
 
@@ -170,8 +175,7 @@ public class Utils {
 
     public List<String> getTexts() throws IOException {
         List<String> texts;
-        File file = new File("./dataBase/texts.txt");
-        try (FileReader fileReader = new FileReader(file);
+        try (FileReader fileReader = new FileReader(FILE);
              BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             texts = bufferedReader.lines().toList();
         } catch (IOException e) {
@@ -181,11 +185,26 @@ public class Utils {
         return texts;
     }
 
+    public HashMap<Phrase, String> getString() throws IOException {
+        HashMap<Phrase, String> strings = new HashMap<>();
+        List<Phrase> phrases = new ArrayList<>(Arrays.asList(Phrase.values()));
+        try (FileReader fileReader = new FileReader(FILE);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            List<String> texts = bufferedReader.lines().toList();
+            for (int i = 0; i < phrases.size(); i++) {
+                strings.put(phrases.get(i), texts.get(i));
+            }
+        } catch (IOException e) {
+            System.out.println("Файл не найден");
+            throw new IOException();
+        }
+        return strings;
+    }
+
     public void printStringWithNewLine(String string) {
         String[] strings = string.split("\\|");
         for (String s : strings) {
             System.out.println(s);
         }
-
     }
 }
