@@ -1,10 +1,8 @@
 package utils;
-
 import fund.PensionFund;
 import fund.Phrase;
 import fund.Request;
 import people.Worker;
-
 import java.io.*;
 import java.util.*;
 
@@ -13,14 +11,14 @@ public class Utils {
 
     private final File FILE = new File("./dataBase/texts.txt");
 
-    private HashMap<Phrase, String> strings = getString();
+    private final HashMap<Phrase, String> STRINGS = getString();
 
 
     public Utils() throws IOException {
     }
 
     public PensionFund findMaxPopularPensionFund(List<PensionFund> pensionFunds) {
-        System.out.println(strings.get(Phrase.POPULAR_FUND));
+        System.out.println(STRINGS.get(Phrase.POPULAR_FUND));
         PensionFund mostPopularPensionFund = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
                 .max(Comparator.comparingInt(fund -> fund.getMembers().size()))
@@ -38,7 +36,7 @@ public class Utils {
 
 
     public Worker findWorkerWithBiggestPensionAll(List<PensionFund> pensionFunds) {
-        System.out.println(strings.get(Phrase.HIGHEST_PENSION));
+        System.out.println(STRINGS.get(Phrase.HIGHEST_PENSION));
         Worker worker = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
                 .map(PensionFund::getMembers)
@@ -49,7 +47,7 @@ public class Utils {
     }
 
     public Worker findWorkerWithBiggestPensionState(List<PensionFund> pensionFunds) {
-        System.out.println(strings.get(Phrase.HIGHEST_STATE_PENSION));
+        System.out.println(STRINGS.get(Phrase.HIGHEST_STATE_PENSION));
         AbstractMap.SimpleEntry<Worker, Double> winner = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
                 .flatMap(pensionFund -> pensionFund.getMembers().stream()
@@ -76,7 +74,7 @@ public class Utils {
     }
 
     public List<Worker> findLosers(List<PensionFund> pensionFunds) {
-        System.out.println(strings.get(Phrase.LOSERS));
+        System.out.println(STRINGS.get(Phrase.LOSERS));
         List<Worker> losers = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
                 .filter(pensionFund -> !pensionFund.isState())
@@ -96,7 +94,7 @@ public class Utils {
     }
 
     public double findMedianPension(PensionFund pensionFund) {
-        System.out.println(strings.get(Phrase.MEDIAN_PENSION_OF_FUNDS));
+        System.out.println(STRINGS.get(Phrase.MEDIAN_PENSION_OF_FUNDS));
         double average = pensionFund.getMembers().stream()
                 .filter(Objects::nonNull)
                 .mapToDouble(pension -> pensionFund.calculateMedianPension(pensionFund.getMembers()))
@@ -106,9 +104,9 @@ public class Utils {
     }
 
     public double getBiggestPensionWithAge(List<PensionFund> pensionFunds) {
-        System.out.println(strings.get(Phrase.HIGHEST_PENSION_AGE));
+        System.out.println(STRINGS.get(Phrase.HIGHEST_PENSION_AGE));
         Scanner scanner = new Scanner(System.in);
-        System.out.println(strings.get(Phrase.INPUT_AGE));
+        System.out.println(STRINGS.get(Phrase.INPUT_AGE));
         int age = scanner.nextInt();
         List<Double> pensions = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
@@ -121,9 +119,9 @@ public class Utils {
     }
 
     public Worker findWorkerWithBiggestPensionWithAge(List<PensionFund> pensionFunds) {
-        System.out.println(strings.get(Phrase.WORKER_HIGHEST_PENSION_AGE));
+        System.out.println(STRINGS.get(Phrase.WORKER_HIGHEST_PENSION_AGE));
         Scanner scanner = new Scanner(System.in);
-        System.out.println(strings.get(Phrase.INPUT_AGE));
+        System.out.println(STRINGS.get(Phrase.INPUT_AGE));
         int age = scanner.nextInt();
         Worker worker = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
@@ -136,7 +134,7 @@ public class Utils {
     }
 
     public Worker findYoungestMembersOfFunds(List<PensionFund> pensionFunds) {
-        System.out.println(strings.get(Phrase.YOUNGEST_WORKER_STATE_FUND));
+        System.out.println(STRINGS.get(Phrase.YOUNGEST_WORKER_STATE_FUND));
         Worker worker = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null && pensionFund.isState())
                 .flatMap(pensionFund -> pensionFund.getMembers().stream())
@@ -154,13 +152,13 @@ public class Utils {
     }
 
     public void findMedianPensionForEach(List<PensionFund> pensionFunds) {
-        System.out.println(strings.get(Phrase.MEDIAN_PENSION_OF_FUNDS));
+        System.out.println(STRINGS.get(Phrase.MEDIAN_PENSION_OF_FUNDS));
         pensionFunds.forEach(pensionFund -> {
             double averagePension = pensionFund.getMembers().stream()
                     .mapToDouble(member -> pensionFund.calculateMedianPension(List.of(member)))
                     .average()
                     .orElse(0.0);
-            System.out.println(strings.get(Phrase.AVERAGE_PENSION_FUNDS) + pensionFund.getName() + ": " + averagePension);
+            System.out.println(STRINGS.get(Phrase.AVERAGE_PENSION_FUNDS) + pensionFund.getName() + ": " + averagePension);
         });
     }
 
