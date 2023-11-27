@@ -1,10 +1,10 @@
 
-import service.Start;
+import service.StartService;
 import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Start start = new Start();
-        start.startApp();
+        StartService startService = new StartService();
+        startService.startApp();
     }
 }

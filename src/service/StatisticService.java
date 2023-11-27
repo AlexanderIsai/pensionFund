@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Statistic {
+public class StatisticService {
     private final CalculationService CALCULATION_SERVICE = new CalculationService();
     private final SupportService SUPPORT_SERVICE = new SupportService();
     private final HashMap<Phrase, String> STRINGS = SUPPORT_SERVICE.getString();
     private final HashMap<Integer, Request> REQUESTS = SUPPORT_SERVICE.createRequestsMap();
     private final String CONTINUE_OPTION = "y";
 
-    public Statistic() throws IOException {
+    public StatisticService() throws IOException {
     }
 
     public  void startStat(List<PensionFund> pensionFunds){

@@ -18,7 +18,7 @@ public class GeneratorOfPerson {
     private final static int MAX_BORDER_OF_MAX_SALARY = 6001;
     private final static File NAMES = new File("./dataBase/names.txt");
     private final static File PERSONS = new File("./dataBase/persons.txt");
-
+    private final static String[] END_OF_NAME = {"а", "я"};
     public static void generatePersons(String[] args) throws IOException {
         SupportService supportService = new SupportService();
         HashMap<Phrase, String> strings = supportService.getString();
@@ -34,7 +34,7 @@ public class GeneratorOfPerson {
                 int minSalary = random.nextInt(MIN_BORDER_OF_MIN_SALARY, MAX_BORDER_OF_MIN_SALARY);
                 int maxSalary = random.nextInt(MIN_BORDER_OF_MAX_SALARY, MAX_BORDER_OF_MAX_SALARY);
                 String[] temp = person.split(" ");
-                Gender gender = (temp[0].endsWith("а") || temp[0].endsWith("я")) ? Gender.FEMALE : Gender.MALE;
+                Gender gender = (temp[0].endsWith(END_OF_NAME[0]) || temp[0].endsWith(END_OF_NAME[1])) ? Gender.FEMALE : Gender.MALE;
                 String generatedString = person + " " + minSalary + " " + maxSalary + " " + gender;
                 bufferedWriter.write(generatedString);
                 bufferedWriter.newLine();
