@@ -1,4 +1,4 @@
-package utils;
+package service;
 
 import fund.PensionFund;
 import fund.Phrase;
@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Start {
-    private final Utils UTILS = new Utils();
-    private final HashMap<Phrase, String> STRINGS = UTILS.getString();
+    private final SupportService SUPPORT_SERVICE = new SupportService();
+    private final HashMap<Phrase, String> STRINGS = SUPPORT_SERVICE.getString();
     private final List<PensionFund> pensionFunds = GeneratorOfPensionFunds.generatePensionFunds();
 
     public Start() throws IOException {
@@ -18,8 +18,8 @@ public class Start {
 
     public void startApp() throws IOException {
         System.out.println(STRINGS.get(Phrase.STAT_PAGE_OPTION));
-        Stat stat = new Stat();
-        stat.startStat(pensionFunds);
+        Statistic statistic = new Statistic();
+        statistic.startStat(pensionFunds);
     }
 
 

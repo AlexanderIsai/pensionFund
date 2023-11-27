@@ -2,7 +2,8 @@ package generators;
 
 import fund.Phrase;
 import people.Worker;
-import utils.Utils;
+import service.CalculationService;
+import service.SupportService;
 
 import java.io.*;
 import java.util.*;
@@ -25,9 +26,8 @@ public class GeneratorOfWorkers {
     }
 
     public static List<Worker> generateWorkers() throws IOException {
-        Utils utils = new Utils();
-
-        HashMap<Phrase, String> strings = utils.getString();
+        SupportService supportService = new SupportService();
+        HashMap<Phrase, String> strings = supportService.getString();
         List<Worker> workers;
         try (FileReader fileReader = new FileReader(PERSONS);
              BufferedReader bufferedReader = new BufferedReader(fileReader);) {

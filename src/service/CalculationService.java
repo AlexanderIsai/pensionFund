@@ -1,21 +1,27 @@
-package utils;
+package service;
 import fund.PensionFund;
 import fund.Phrase;
-import fund.Request;
 import people.Worker;
 import java.io.*;
 import java.util.*;
 
 
-public class Utils {
+public class CalculationService {
 
     private final File FILE = new File("./dataBase/texts.txt");
 
-    private final HashMap<Phrase, String> STRINGS = getString();
+    private final SupportService SUPPORT_SERVICE = new SupportService();
+
+    private final HashMap<Phrase, String> STRINGS = SUPPORT_SERVICE.getString();
 
 
-    public Utils() throws IOException {
+    public CalculationService() throws IOException {
     }
+
+    /**
+     * @param pensionFunds - принимает список пенсионных фондов
+     * @return PensionFund - возвращает пенсионный фонд с самым большим количеством участников
+     */
 
     public PensionFund findMaxPopularPensionFund(List<PensionFund> pensionFunds) {
         System.out.println(STRINGS.get(Phrase.POPULAR_FUND));
@@ -26,26 +32,24 @@ public class Utils {
         return mostPopularPensionFund;
     }
 
-    public int findMaxQuantityMembers(List<PensionFund> pensionFunds) {
-        List<Integer> countMembers = pensionFunds.stream()
-                .filter(Objects::nonNull)
-                .map(pensionFund -> pensionFund.getMembers().size())
-                .toList();
-        return Collections.max(countMembers);
-    }
-
-
+    /**
+     * @param pensionFunds - принимает список пенсионных фондов
+     * @return Worker - возвращает работника с самой большой пенсией (принимаются во внимание все фонды)
+     */
     public Worker findWorkerWithBiggestPensionAll(List<PensionFund> pensionFunds) {
         System.out.println(STRINGS.get(Phrase.HIGHEST_PENSION));
         Worker worker = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
-                .map(PensionFund::getMembers)
-                .flatMap(Collection::stream)
+                .flatMap(pensionFund -> pensionFund.getMembers().stream())
                 .max(Comparator.comparingDouble(Worker::calculatePension))
                 .orElse(null);
         return worker;
     }
-
+    /**
+     * @param pensionFunds - принимает список пенсионных фондов
+     * @return Worker - возвращает работника с самой большой пенсией (принимаются во внимание только
+     * государственные фонды...в остальных фондах деньги украли)
+     */
     public Worker findWorkerWithBiggestPensionState(List<PensionFund> pensionFunds) {
         System.out.println(STRINGS.get(Phrase.HIGHEST_STATE_PENSION));
         AbstractMap.SimpleEntry<Worker, Double> winner = pensionFunds.stream()
@@ -57,22 +61,27 @@ public class Utils {
         assert winner != null;
         return winner.getKey();
     }
-
+    /**
+     * @param pensionFunds - принимает список пенсионных фондов
+     * @return Double - возвращает самую большую пенсию (принимаются во внимание только государственные фонды)
+     */
     public Double biggestPensionAll(List<PensionFund> pensionFunds) {
         double maxP = 0;
-
-        for (int i = 0; i < pensionFunds.size(); i++) {
-            List<Worker> members = pensionFunds.get(i).getMembers();
-            for (int j = 0; j < members.size(); j++) {
-                pensionFunds.get(i).calculatePensionFor(members.get(j));
-                if (pensionFunds.get(i).calculatePensionFor(members.get(j)) > maxP) {
-                    maxP = pensionFunds.get(i).calculatePensionFor(members.get(j));
+        for (PensionFund pensionFund : pensionFunds) {
+            List<Worker> members = pensionFund.getMembers();
+            for (Worker member : members) {
+                pensionFund.calculatePensionFor(member);
+                if (pensionFund.calculatePensionFor(member) > maxP) {
+                    maxP = pensionFund.calculatePensionFor(member);
                 }
             }
         }
         return maxP;
     }
-
+    /**
+     * @param pensionFunds - принимает список пенсионных фондов
+     * @return losers - возвращает список участников негосударственных фондов
+     */
     public List<Worker> findLosers(List<PensionFund> pensionFunds) {
         System.out.println(STRINGS.get(Phrase.LOSERS));
         List<Worker> losers = pensionFunds.stream()
@@ -82,7 +91,10 @@ public class Utils {
                 .toList();
         return losers;
     }
-
+    /**
+     * @param pensionFunds - принимает список пенсионных фондов
+     * @return pensions - возвращает список всех пенсий
+     */
     public List<Double> getAllPensions(List<PensionFund> pensionFunds) {
         List<Double> pensions = pensionFunds.stream()
                 .filter(pensionFund -> pensionFund != null && pensionFund.getMembers() != null)
@@ -93,6 +105,10 @@ public class Utils {
         return pensions;
     }
 
+    /**
+     * @param pensionFund - принимает пенсионный фонд
+     * @return double - возвращает среднюю пенсию по фонду
+     */
     public double findMedianPension(PensionFund pensionFund) {
         System.out.println(STRINGS.get(Phrase.MEDIAN_PENSION_OF_FUNDS));
         double average = pensionFund.getMembers().stream()
@@ -102,7 +118,10 @@ public class Utils {
                 .orElse(0.0);
         return average;
     }
-
+    /**
+     * @param pensionFunds - принимает пенсионный фонд
+     * @return double - возвращает самую большую пенсию у участника ДО определенного возраста
+     */
     public double getBiggestPensionWithAge(List<PensionFund> pensionFunds) {
         System.out.println(STRINGS.get(Phrase.HIGHEST_PENSION_AGE));
         Scanner scanner = new Scanner(System.in);
@@ -117,7 +136,10 @@ public class Utils {
                 .toList();
         return Collections.max(pensions);
     }
-
+    /**
+     * @param pensionFunds - принимает пенсионный фонд
+     * @return double - возвращает участника ДО определенного возраста с самой большой пенсией
+     */
     public Worker findWorkerWithBiggestPensionWithAge(List<PensionFund> pensionFunds) {
         System.out.println(STRINGS.get(Phrase.WORKER_HIGHEST_PENSION_AGE));
         Scanner scanner = new Scanner(System.in);
@@ -132,7 +154,10 @@ public class Utils {
                 .orElse(null);
         return worker;
     }
-
+    /**
+     * @param pensionFunds - принимает пенсионный фонд
+     * @return double - возвращает самого молодого участника пенсионных фондов
+     */
     public Worker findYoungestMembersOfFunds(List<PensionFund> pensionFunds) {
         System.out.println(STRINGS.get(Phrase.YOUNGEST_WORKER_STATE_FUND));
         Worker worker = pensionFunds.stream()
@@ -150,7 +175,10 @@ public class Utils {
 //                .orElse(null);
 //        return worker.getKey();
     }
-
+    /**
+     * @param pensionFunds - принимает пенсионный фонд
+     * @return выводит на экран средние пенсии по фондам (реализация через форич)
+     */
     public void findMedianPensionForEach(List<PensionFund> pensionFunds) {
         System.out.println(STRINGS.get(Phrase.MEDIAN_PENSION_OF_FUNDS));
         pensionFunds.forEach(pensionFund -> {
@@ -160,49 +188,5 @@ public class Utils {
                     .orElse(0.0);
             System.out.println(STRINGS.get(Phrase.AVERAGE_PENSION_FUNDS) + pensionFund.getName() + ": " + averagePension);
         });
-    }
-
-    public HashMap<Integer, Request> createRequestsMap() {
-        HashMap<Integer, Request> requestsMap = new HashMap<>();
-        List<Request> requests = new ArrayList<>(Arrays.asList(Request.values()));
-        for (int i = 0; i < requests.size(); i++) {
-            requestsMap.put(i + 1, requests.get(i));
-        }
-        return requestsMap;
-    }
-
-    public List<String> getTexts() throws IOException {
-        List<String> texts;
-        try (FileReader fileReader = new FileReader(FILE);
-             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            texts = bufferedReader.lines().toList();
-        } catch (IOException e) {
-            System.out.println("Файл не найден");
-            throw new IOException();
-        }
-        return texts;
-    }
-
-    public HashMap<Phrase, String> getString() throws IOException {
-        HashMap<Phrase, String> strings = new HashMap<>();
-        List<Phrase> phrases = new ArrayList<>(Arrays.asList(Phrase.values()));
-        try (FileReader fileReader = new FileReader(FILE);
-             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            List<String> texts = bufferedReader.lines().toList();
-            for (int i = 0; i < phrases.size(); i++) {
-                strings.put(phrases.get(i), texts.get(i));
-            }
-        } catch (IOException e) {
-            System.out.println("Файл не найден");
-            throw new IOException();
-        }
-        return strings;
-    }
-
-    public void printStringWithNewLine(String string) {
-        String[] strings = string.split("\\|");
-        for (String s : strings) {
-            System.out.println(s);
-        }
     }
 }

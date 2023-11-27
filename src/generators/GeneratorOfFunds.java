@@ -1,7 +1,8 @@
 package generators;
 
 import fund.Phrase;
-import utils.Utils;
+import service.CalculationService;
+import service.SupportService;
 
 import java.io.*;
 import java.util.HashMap;
@@ -15,10 +16,8 @@ public class GeneratorOfFunds {
     private static final String STATE_STATUS = "Государственный";
 
     public static void main(String[] args) throws IOException {
-
-        Utils utils = new Utils();
-
-        HashMap<Phrase, String> strings = utils.getString();
+        SupportService supportService = new SupportService();
+        HashMap<Phrase, String> strings = supportService.getString();
         try (FileReader fileReader = new FileReader(FUNDS);
              FileWriter fileWriter = new FileWriter(PENSION_FUNDS);
 

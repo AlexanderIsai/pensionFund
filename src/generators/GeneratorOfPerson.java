@@ -2,7 +2,8 @@ package generators;
 
 import fund.Phrase;
 import people.*;
-import utils.Utils;
+import service.CalculationService;
+import service.SupportService;
 
 import java.io.*;
 import java.util.HashMap;
@@ -19,9 +20,8 @@ public class GeneratorOfPerson {
     private final static File PERSONS = new File("./dataBase/persons.txt");
 
     public static void generatePersons(String[] args) throws IOException {
-        Utils utils = new Utils();
-
-        HashMap<Phrase, String> strings = utils.getString();
+        SupportService supportService = new SupportService();
+        HashMap<Phrase, String> strings = supportService.getString();
 
         Random random = new Random();
         try (FileReader fileReader = new FileReader(NAMES);

@@ -1,9 +1,7 @@
 package generators;
-
 import fund.PensionFund;
 import fund.Phrase;
-import utils.Utils;
-
+import service.SupportService;
 import java.io.*;
 import java.util.*;
 
@@ -14,8 +12,8 @@ public class GeneratorOfPensionFunds {
     }
 
     public static List<PensionFund> generatePensionFunds() throws IOException {
-        Utils utils = new Utils();
-        HashMap<Phrase, String> strings = utils.getString();
+        SupportService supportService = new SupportService();
+        HashMap<Phrase, String> strings = supportService.getString();
         FileReader fileReader = new FileReader(FUNDS);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 

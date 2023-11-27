@@ -19,7 +19,7 @@ public class PensionFund {
     private String dateCreation;
     private List<Worker> members;
 
-    private static Map<DayOfWeek, Boolean> daysOfWeek = fillWorkDays();
+    private static Map<DayOfWeek, Boolean> daysOfWeek = PensionFundService.fillWorkDays();
 
     public PensionFund(String name, boolean isState, String dateCreation) {
         this.name = name;
@@ -42,7 +42,7 @@ public class PensionFund {
         this.isState = temp[temp.length - 1].equals("true");
         this.dateCreation = temp[temp.length - 2];
         this.name = String.join(" ", Arrays.copyOfRange(temp, 0, temp.length - 2));
-        this.members = fillPensionFundByMembers(MIN_QUANTITY, MAX_QUANTITY);
+        this.members = PensionFundService.fillPensionFundByMembers(MIN_QUANTITY, MAX_QUANTITY, this.isState);
     }
 
     public String getName() {
@@ -87,30 +87,6 @@ public class PensionFund {
 
     public static int getMaxQuantity() {
         return MAX_QUANTITY;
-    }
-
-    public List<Worker> fillPensionFundByMembers(int minQuantity, int maxQuantity) throws IOException {
-        Random random = new Random();
-        List<Worker> workers = GeneratorOfWorkers.generateWorkers();
-        List<Worker> members = new ArrayList<>();
-        int quantityOfMembers = (isState) ? random.nextInt(minQuantity * 10, maxQuantity * 2) : random.nextInt(minQuantity, maxQuantity / 2);
-        for (int i = 0; i < quantityOfMembers; i++) {
-            Worker worker = workers.get(random.nextInt(workers.size()));
-            if (!members.contains(worker)) {
-                members.add(worker);
-            }
-        }
-        return members;
-    }
-
-    public static HashMap<DayOfWeek, Boolean> fillWorkDays() {
-        HashMap<DayOfWeek, Boolean> workingDays = new HashMap<>();
-        Random random = new Random();
-        DayOfWeek[] daysOfWeek = DayOfWeek.values();
-        for (DayOfWeek dayOfWeek : daysOfWeek) {
-            workingDays.put(dayOfWeek, random.nextDouble() > 0.1);
-        }
-        return workingDays;
     }
 
     public boolean getInfo() {
